@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HelloController extends Application {
-    private static final int PORT = 5001; // Port dla połączenia
+    private static final int PORT = 5001;
     private Button[][] plansza = new Button[3][3];
     private boolean czyTuraX = true;
     private Stage stage;
@@ -40,7 +40,7 @@ public class HelloController extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
-        boolean chceBycSerwerem = false; // Zmien to na podstawie np. wyboru użytkownika
+        boolean chceBycSerwerem = false;
 
         if (chceBycSerwerem) {
             startServer();
@@ -84,7 +84,7 @@ public class HelloController extends Application {
 
     private void runGame() {
         GridPane grid = new GridPane();
-        grid.setStyle("-fx-background-color: black;"); // Tło planszy na czarne
+        grid.setStyle("-fx-background-color: black;");
         for (int wiersz = 0; wiersz < 3; wiersz++) {
             for (int kolumna = 0; kolumna < 3; kolumna++) {
                 Button przycisk = new Button("");
@@ -101,13 +101,13 @@ public class HelloController extends Application {
         this.chatArea = new TextArea();
         chatArea.setEditable(false);
         chatArea.setPrefHeight(150);
-        chatArea.setStyle("-fx-background-color: white; -fx-text-fill: black;"); // Tło czatu białe, tekst czarny
+        chatArea.setStyle("-fx-background-color: white; -fx-text-fill: black;");
 
         TextField messageField = new TextField();
-        messageField.setStyle("-fx-background-color: white; -fx-text-fill: black;"); // Tło dla pola tekstowego białe, tekst czarny
+        messageField.setStyle("-fx-background-color: white; -fx-text-fill: black;");
 
         Button sendButton = new Button("Send");
-        sendButton.setStyle("-fx-background-color: black; -fx-text-fill: white;"); // Tło dla przycisku czarne, tekst biały
+        sendButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         sendButton.setOnAction(e -> {
             String message = messageField.getText();
             if (!message.isEmpty()) {
@@ -121,8 +121,8 @@ public class HelloController extends Application {
         chatBox.setSpacing(10);
         chatBox.setPrefHeight(200);
 
-        HBox mainLayout = new HBox(grid, chatBox);  // Chat na prawo, plansza na lewo
-        VBox layout = new VBox(createMenu(), mainLayout);  // Dodaj MenuBar na górze
+        HBox mainLayout = new HBox(grid, chatBox);
+        VBox layout = new VBox(createMenu(), mainLayout);
         stage.setScene(new Scene(layout, 600, 330));
         stage.show();
     }
@@ -136,7 +136,7 @@ public class HelloController extends Application {
         String symbol = czyTuraX ? "X" : "O";
         plansza[wiersz][kolumna].setText(symbol);
 
-        // Ustawienie koloru symbolu X na czerwony, a O na niebieski
+
         plansza[wiersz][kolumna].setStyle("-fx-background-color: black; -fx-border-color: white; -fx-text-fill: "
                 + (czyTuraX ? "red;" : "blue;"));
 
@@ -157,35 +157,35 @@ public class HelloController extends Application {
     private boolean checkWinner() {
         for (int i = 0; i < 3; i++) {
             if (!plansza[i][0].getText().isEmpty() && plansza[i][0].getText().equals(plansza[i][1].getText()) && plansza[i][1].getText().equals(plansza[i][2].getText())) {
-                // Zwycięzca w poziomie
+
                 Platform.runLater(() -> {
                     chatArea.appendText("Gracz " + (czyTuraX ? "X" : "O") + " wygrał!\n");
-                    resetGame(true);  // Resetowanie gry po wygranej
+                    resetGame(true);
                 });
                 return true;
             }
             if (!plansza[0][i].getText().isEmpty() && plansza[0][i].getText().equals(plansza[1][i].getText()) && plansza[1][i].getText().equals(plansza[2][i].getText())) {
-                // Zwycięzca w pionie
+
                 Platform.runLater(() -> {
                     chatArea.appendText("Gracz " + (czyTuraX ? "X" : "O") + " wygrał!\n");
-                    resetGame(true);  // Resetowanie gry po wygranej
+                    resetGame(true);
                 });
                 return true;
             }
         }
         if (!plansza[0][0].getText().isEmpty() && plansza[0][0].getText().equals(plansza[1][1].getText()) && plansza[1][1].getText().equals(plansza[2][2].getText())) {
-            // Zwycięzca po przekątnej (lewy górny do prawy dolny)
+
             Platform.runLater(() -> {
                 chatArea.appendText("Gracz " + (czyTuraX ? "X" : "O") + " wygrał!\n");
-                resetGame(true);  // Resetowanie gry po wygranej
+                resetGame(true);
             });
             return true;
         }
         if (!plansza[0][2].getText().isEmpty() && plansza[0][2].getText().equals(plansza[1][1].getText()) && plansza[1][1].getText().equals(plansza[2][0].getText())) {
-            // Zwycięzca po przekątnej (prawy górny do lewy dolny)
+
             Platform.runLater(() -> {
                 chatArea.appendText("Gracz " + (czyTuraX ? "X" : "O") + " wygrał!\n");
-                resetGame(true);  // Resetowanie gry po wygranej
+                resetGame(true);
             });
             return true;
         }
@@ -193,29 +193,29 @@ public class HelloController extends Application {
     }
 
 
-    private boolean gameReset = false; // Flaga kontrolująca, czy gra była zresetowana
+    private boolean gameReset = false;
 
     private void resetGame(boolean przegrana) {
-        // Jeśli gra została już zresetowana (i nie kończy się pętla), nie wykonuj resetu
+
         if (gameReset) {
             return;
         }
 
-        // Oznaczamy, że gra jest w trakcie resetu
+
         gameReset = true;
 
         Platform.runLater(() -> {
             // Reset planszy
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    plansza[i][j].setText(""); // Czyszczenie każdej komórki
+                    plansza[i][j].setText("");
                 }
             }
 
-            // Resetowanie stanu gry
-            czyTuraX = true;  // Po resecie zaczynamy od X
 
-            // Informowanie użytkownika o wyniku gry i resecie
+            czyTuraX = true;
+
+
             if (przegrana) {
                 chatArea.appendText("Gracz " + (isServer ? "O" : "X") + " wygrał, ponieważ przeciwnik zrestartował grę!\n");
             } else {
@@ -223,18 +223,18 @@ public class HelloController extends Application {
             }
         });
 
-        // Powiadomienie drugiego gracza o resecie gry
+
         if (out != null) {
             out.println("RESET");
         }
 
-        // Resetujemy flagę tylko po zakończeniu resetu gry
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                gameReset = false;  // Teraz możemy ponownie zresetować grę
+                gameReset = false;
             }
-        }, 500); // Czekaj 0.5 sekundy przed ponownym zezwoleniem na reset
+        }, 500);
     }
 
 
@@ -243,7 +243,7 @@ public class HelloController extends Application {
 
 
     private MenuBar createMenu() {
-        Menu fileMenu = new Menu("File"); // Deklaracja fileMenu wewnątrz metody
+        Menu fileMenu = new Menu("File");
 
         MenuItem startGameItem = new MenuItem("Restart Game");
         startGameItem.setOnAction(e -> resetGame(true));
@@ -257,13 +257,13 @@ public class HelloController extends Application {
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.setOnAction(e -> Platform.exit());
 
-        // Dodajemy wszystkie elementy do fileMenu
+
         fileMenu.getItems().addAll(startGameItem, saveGameItem, loadGameItem, exitItem);
 
-        // Tworzymy i zwracamy MenuBar
+
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().add(fileMenu);
-        menuBar.setStyle("-fx-background-color: black; -fx-text-fill: white;"); // Tło menu na czarne, tekst biały
+        menuBar.setStyle("-fx-background-color: black; -fx-text-fill: white;");
         return menuBar;
     }
 
@@ -278,8 +278,8 @@ public class HelloController extends Application {
                         String message = linia.substring(5);
                         Platform.runLater(() -> chatArea.appendText("Opponent: " + message + "\n"));
                     } else if (linia.equals("RESET")) {
-                        if (!gameReset) {  // Jeśli gra nie została jeszcze zresetowana, to teraz wykonaj reset
-                            Platform.runLater(() -> resetGame(false));  // Nie wysyłamy ponownie "RESET"
+                        if (!gameReset) {
+                            Platform.runLater(() -> resetGame(false));
                         }
                     } else {
                         String[] parts = linia.split(",");
@@ -300,7 +300,7 @@ public class HelloController extends Application {
 
 
     private void sendMessage(String message) {
-        out.println("CHAT:" + message);  // Wysyłamy wiadomość z prefiksem "CHAT:"
+        out.println("CHAT:" + message);
     }
 
     private void saveGameState() {
